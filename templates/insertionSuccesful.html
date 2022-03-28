@@ -1,0 +1,15 @@
+{%set a=request.url%}
+    {%set tablename = "hi"%}
+    {%set ns = namespace(b = request.url)%}
+    {%for i in range(a|length)%}
+        {%if a[i] == '=' %}
+            {%set tablename = a[i+1:]%}
+            {%set ns.b = a[i+1:]%}
+            <h2>You are inserting in the table {{tablename}}</h2>
+            
+        {%endif%}
+        
+    {%endfor%}
+
+<h1>INSERTION SUCCESFUL!</h1>
+<a href="/users?table={{ns.b}}"><button>See updated database</button></a>

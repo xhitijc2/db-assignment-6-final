@@ -1,0 +1,4 @@
+Name <input type="text", name="name"/>
+        <br>
+        Email <input type = "email" name = "email" />
+        <br>

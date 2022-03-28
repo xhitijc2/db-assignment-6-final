@@ -1,0 +1,42 @@
+{%set a=request.url%}
+{%for i in range(a|length)%}
+    {%if a[i] == '=' %}
+        <h2>You are seeing the table {{a[i+1:]}}</h2>
+    {%endif%}
+{%endfor%}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <table border="1">
+        <tr>
+            {%for colname in columns%}
+                <td>
+                    <b>{{colname[0]}}</b>
+                </td>
+            {%endfor%}
+        </tr>
+        {% for user in userDetails %}
+        
+            <tr>
+                {%for i in range(user|length)%}
+                <td>
+                    {{user[i]}}
+                </td>
+                
+            {%endfor%}
+            </tr>
+        {% endfor %}
+    </table>
+
+    
+    <a href="/"><button>Go to home page</button></a>
+</body>
+</html>
