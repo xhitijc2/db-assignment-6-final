@@ -2,3 +2,10 @@ Name <input type="text", name="name"/>
         <br>
         Email <input type = "email" name = "email" />
         <br>
+
+
+
+        hich columns do you want to update?<br>
+        {%for column in columns%}
+            {{column[0]}} <input type="checkbox" name="column"><br>
+        {%endfor%}

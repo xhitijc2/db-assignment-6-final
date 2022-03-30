@@ -2,7 +2,7 @@
     {%set tablename = "hi"%}
     {%set ns = namespace(b = request.url)%}
     {%for i in range(a|length)%}
-        {%if a[i] == '=' %}
+        {%if a[i] == '=' and a[i-1]== 'e'%}
             {%set tablename = a[i+1:]%}
             {%set ns.b = a[i+1:]%}
             <h2>You want to update the table {{tablename}}</h2>
@@ -10,8 +10,7 @@
         {%endif%}
         
     {%endfor%}
-
-
+    
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,10 +21,13 @@
 </head>
 <body>
     
-    
-    <form method = "POST" >
+    <h2>Update stuff here </h2>
+    <form method = "POST" action="">
         
-        Enter the row of the row you want to edit here <input type="text" name="primarykey">
+        Which columns do you want to update?<br>
+        {%for column in columns%}
+            {{column[0]}} <input type="checkbox" name="column"><br>
+        {%endfor%}
         <br>
         <input type = "submit">
     </form>

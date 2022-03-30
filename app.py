@@ -124,31 +124,199 @@ def delete():
         # fetch form data
         tablename = request.args.get('table')[:]
         userDetails = request.form
-        name = userDetails['name']
-        cur = mysql.connection.cursor()
-        cur.execute(
-            "delete from %s where name= '%s' " % (tablename, name))
-        mysql.connection.commit()
-        cur.close()
-        return redirect('/users')
+        # ame = userDetails['name']
+        # cur = mysql.connection.cursor()
+        # cur.execute(
+        #     "delete from %s where name= '%s' " % (tablename, name))
+        # mysql.connection.commit()
+        # cur.close()
+        return render_template('/debug2.html', userDetails=userDetails, t=tablename)
     return render_template('delete.html')
 
 
-@ app.route('/update', methods=['GET', 'POST'])
-def update():
+@ app.route('/updelete', methods=['GET', 'POST'])
+def deleteup():
     if request.method == 'POST':
         # fetch form data
         tablename = request.args.get('table')[:]
         userDetails = request.form
-        name = userDetails['name']
-        email = userDetails['email']
+        # ame = userDetails['name']
+        # cur = mysql.connection.cursor()
+        # cur.execute(
+        #     "delete from %s where name= '%s' " % (tablename, name))
+        # mysql.connection.commit()
+        # cur.close()
+        return render_template('/debug3.html', userDetails=userDetails, t=tablename)
+    return render_template('updelete.html')
+
+
+@ app.route('/delet3', methods=['GET', 'POST'])
+def delete3():
+    if request.method == 'POST':
+        # fetch form data
+        tablename = request.args.get('table')[:]
+        userDetails = request.form
+        rowNo = request.args.get('primaryKey')
+
         cur = mysql.connection.cursor()
-        cur.execute(
-            "update %s set name=%s where email=%s", (tablename, name, email))
+        # cur.execute(
+        #     "delete from %s where name= '%s' " % (tablename, name))\\
+        cur.execute("select * from %s " % (tablename))
+        tabledetails = cur.fetchall()
+
+        if (rowNo.isnumeric() == False):
+            # throw error
+            errorr = 0
+            return render_template('/errror.html')
+        rowToBeDeleted = tabledetails[int(rowNo)-1]
+
+        cur.execute('SHOW COLUMNS FROM %s' % (tablename))
+        columns = cur.fetchall()
+
+        cmnd = "delete from " + tablename + " where "
+        toAdd = [column[0] for column in columns]
+
+        for i in range(len(toAdd)):
+            if (columns[i][1] == 'int'):
+                if (i == len(toAdd)-1):
+                    cmnd += str(toAdd[i]) + "= " + str(rowToBeDeleted[i])
+                else:
+                    cmnd += str(toAdd[i]) + "= " + \
+                        str(rowToBeDeleted[i]) + " and "
+            else:
+                if (i == len(toAdd)-1):
+                    cmnd += str(toAdd[i]) + "= " + " \"" + \
+                        str(rowToBeDeleted[i]) + "\""
+                else:
+                    cmnd += str(toAdd[i]) + "= " + " \"" + \
+                        str(rowToBeDeleted[i]) + "\"" + " and "
+        cur.execute(cmnd)
         mysql.connection.commit()
         cur.close()
-        return redirect('/users')
-    return render_template('update.html')
+        return render_template('/insertionSuccesful.html', userDetails=userDetails, t=tablename, rowNo=rowNo, td=tabledetails, rtbd=rowToBeDeleted, cmnd=cmnd, columns=columns)
+    return render_template('delet3.html')
+
+
+@ app.route('/dele4', methods=['GET', 'POST'])
+def delete4():
+    tablename = request.args.get('table')[:]
+    if request.method == 'POST':
+        # fetch form data
+        userDetails = request.form
+        rowNo = request.args.get('primaryKey')
+
+        cur = mysql.connection.cursor()
+        # cur.execute(
+        #     "delete from %s where name= '%s' " % (tablename, name))\\
+        cur.execute("select * from %s " % (tablename))
+        tabledetails = cur.fetchall()
+
+        if (rowNo.isnumeric() == False):
+            # throw error
+            errorr = 0
+            return render_template('/errror.html')
+        # return render_template('/debbug.html', a=tabledetails[0])
+        rowToBeDeleted = tabledetails[int(rowNo)-1]
+
+        cur.execute('SHOW COLUMNS FROM %s' % (tablename))
+        columns = cur.fetchall()
+
+        cmnd = "delete from " + tablename + " where "
+        toAdd = [column[0] for column in columns]
+
+        for i in range(len(toAdd)):
+            if (columns[i][1] == 'int'):
+                if (i == len(toAdd)-1):
+                    cmnd += str(toAdd[i]) + "= " + str(rowToBeDeleted[i])
+                else:
+                    cmnd += str(toAdd[i]) + "= " + \
+                        str(rowToBeDeleted[i]) + " and "
+            else:
+                if (i == len(toAdd)-1):
+                    cmnd += str(toAdd[i]) + "= " + " \"" + \
+                        str(rowToBeDeleted[i]) + "\""
+                else:
+                    cmnd += str(toAdd[i]) + "= " + " \"" + \
+                        str(rowToBeDeleted[i]) + "\"" + " and "
+        cur.execute(cmnd)
+        mysql.connection.commit()
+        cur.close()
+        return redirect('insert?table=' + tablename, userDetails=userDetails, t=tablename, rowNo=rowNo, td=tabledetails, rtbd=rowToBeDeleted, cmnd=cmnd, columns=columns)
+    return redirect('/insert?table=' + tablename)
+
+
+@ app.route('/update', methods=['GET', 'POST'])
+def update():
+    tablename = request.args.get('table')[:]
+    cur = mysql.connection.cursor()
+    cur.execute('SHOW COLUMNS FROM %s' % (tablename))
+    columns = cur.fetchall()
+    if request.method == 'POST':
+
+        cur = mysql.connection.cursor()
+
+        userDetails = request.form
+
+        # return redirect('/debug?primaryKey='+userDetails + '&table=' + tablename)
+        return render_template('/debug2.html', userDetails=int(userDetails['primarykey']), t=tablename)
+    return render_template('/update.html', columns=columns)
+
+
+@ app.route('/update2', methods=['GET', 'POST'])
+def update2():
+    tablename = request.args.get('table')[:]
+    print("printing request args")
+    print(request.args.get)
+    a = (request.args.get)
+    cur = mysql.connection.cursor()
+    cur.execute('SHOW COLUMNS FROM %s' % (tablename))
+    columns = cur.fetchall()
+
+    cur.execute('select * FROM %s' % (tablename))
+    entry = cur.fetchall()
+
+# delete
+    userDetails = request.form
+    rowNo = request.args.get('primaryKey')
+    if (request.method == "POST"):
+
+        cur = mysql.connection.cursor()
+
+        cur.execute("select * from %s " % (tablename))
+        tabledetails = cur.fetchall()
+
+        if (rowNo.isnumeric() == False):
+            # throw error
+            return render_template('errror.html')
+        rowToBeDeleted = tabledetails[int(rowNo)-1]
+
+        cur.execute('SHOW COLUMNS FROM %s' % (tablename))
+        columns = cur.fetchall()
+
+        cmnd = "delete from " + tablename + " where "
+        toAdd = [column[0] for column in columns]
+
+        for i in range(len(toAdd)):
+            if (columns[i][1] == 'int'):
+                if (i == len(toAdd)-1):
+                    cmnd += str(toAdd[i]) + "= " + str(rowToBeDeleted[i])
+                else:
+                    cmnd += str(toAdd[i]) + "= " + \
+                        str(rowToBeDeleted[i]) + " and "
+            else:
+                if (i == len(toAdd)-1):
+                    cmnd += str(toAdd[i]) + "= " + " \"" + \
+                        str(rowToBeDeleted[i]) + "\""
+                else:
+                    cmnd += str(toAdd[i]) + "= " + " \"" + \
+                        str(rowToBeDeleted[i]) + "\"" + " and "
+        cur.execute(cmnd)
+        mysql.connection.commit()
+        cur.close()
+
+        return render_template('/debug.html', aa=int(a('primaryKey'))-1, columns=columns, entry=entry)
+
+    return render_template('update2.html', columns=columns)
 
 
 if __name__ == "__main__":
