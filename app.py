@@ -33,7 +33,9 @@ def showtable():
 @app.route('/insert', methods=['GET', 'POST'])
 def insert():
     # getting the table name
-    tablename = request.args.get('table')[:]
+    tablename = request.args.get('table')
+    typeofquery = request.args.get('type')
+    # return render_template('/debbug.html', tablename=tablename, t=typeofquery)
     cur = mysql.connection.cursor()
 
     cur.execute('SHOW COLUMNS FROM %s' % (tablename))
@@ -95,9 +97,9 @@ def insert():
 
         mysql.connection.commit()
         cur.close()
-        return render_template('/insertionSuccesful.html')
+        return render_template('/insertionSuccesful.html', t=typeofquery, tablename=tablename)
 
-    return render_template('insert.html', columns=columns)
+    return render_template('insert.html', columns=columns, t=typeofquery, tablename=tablename)
 
 
 @ app.route('/users')
@@ -118,11 +120,18 @@ def users():
     #     return render_template("users.html", userDetails=userDetails)
 
 
+@ app.route('/finish', methods=['GET', 'POST'])
+def finish():
+    return render_template('insertionSuccesful.html', t='a')
+
+
 @ app.route('/delete', methods=['GET', 'POST'])
 def delete():
+    tablename = request.args.get('table')[:]
+    typeofquery = request.args.get('type')[:]
     if request.method == 'POST':
         # fetch form data
-        tablename = request.args.get('table')[:]
+
         userDetails = request.form
         # ame = userDetails['name']
         # cur = mysql.connection.cursor()
@@ -130,8 +139,9 @@ def delete():
         #     "delete from %s where name= '%s' " % (tablename, name))
         # mysql.connection.commit()
         # cur.close()
-        return render_template('/debug2.html', userDetails=userDetails, t=tablename)
-    return render_template('delete.html')
+        return render_template('/debug2.html', userDetails=userDetails, t=tablename, typeofquery=typeofquery)
+    return render_template('delete.html', typeofquery=typeofquery, t=tablename)
+    # return render_template('/debbug.html', typeofquery=typeofquery, t=tablename)
 
 
 @ app.route('/updelete', methods=['GET', 'POST'])
@@ -152,11 +162,13 @@ def deleteup():
 
 @ app.route('/delet3', methods=['GET', 'POST'])
 def delete3():
+    tablename = request.args.get('table')[:]
+    rowNo = request.args.get('primaryKey')
+    typeofquery = request.args.get('type')
+    # return render_template('/debbug.html',tablename =?)
     if request.method == 'POST':
         # fetch form data
-        tablename = request.args.get('table')[:]
         userDetails = request.form
-        rowNo = request.args.get('primaryKey')
 
         cur = mysql.connection.cursor()
         # cur.execute(
@@ -193,7 +205,7 @@ def delete3():
         cur.execute(cmnd)
         mysql.connection.commit()
         cur.close()
-        return render_template('/insertionSuccesful.html', userDetails=userDetails, t=tablename, rowNo=rowNo, td=tabledetails, rtbd=rowToBeDeleted, cmnd=cmnd, columns=columns)
+        return render_template('/insertionSuccesful.html', userDetails=userDetails, tablename=tablename, rowNo=rowNo, td=tabledetails, rtbd=rowToBeDeleted, cmnd=cmnd, columns=columns, t=typeofquery)
     return render_template('delet3.html')
 
 

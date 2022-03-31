@@ -1,0 +1,51 @@
+<br>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <style>
+        .btncontainer{
+            padding : auto;
+            /* height : 1000px; */
+            /* background-color: aqua; */
+            width: 60%;
+        }
+        .center {
+            margin: auto;
+            align-content: center;
+            /* align-items:  center; */
+            text-align: center;
+            width: 60%;
+            /* border: 5px solid #FFFF00; */
+            padding: auto;
+}
+
+    </style>
+</head>
+<body style ="background-color:lightgoldenrodyellow;">
+    <div class="center">
+        {%set a=request.url%}
+            {%set tablename = "hi"%}
+            {%set ns = namespace(b = request.url)%}
+            {%for i in range(a|length)%}
+                {%if a[i] == '=' %}
+                    {%set tablename = a[i+1:]%}
+                    {%set ns.b = a[i+1:]%}
+                    <h2>You are inserting in the table {{tablename}}</h2>
+            
+                {%endif%}
+        
+            {%endfor%}
+
+        <h1>INSERTION SUCCESFUL!</h1>
+        <a href="/users?table={{ns.b}}"><button>See updated database</button></a>
+    </div>
+</body>

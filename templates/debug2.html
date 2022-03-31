@@ -1,8 +1,21 @@
 
-Are you sure you want to delete row number <b>{{userDetails['name']}}</b> from the table <b>{{t}}</b>?
+Are you sure you want to {%if typeofquery=='d' %} {{"delete"}} {%else%} {{"edit"}} {%endif%} row number <b>{{userDetails['name']}}</b> from the table <b>{{t}}</b>?
 
-<form action="/delet3?primaryKey={{userDetails['name']}}&table={{t}}" method="POST"><br>
+
+{%if typeofquery =='d'%}
+<form action="/delet3?primaryKey={{userDetails['name']}}&table={{t}}&type={{typeofquery}}" method="POST"><br>
     <input type="submit">
     
     <button> <a href="/"> NO</a></button>
 </form>
+
+{%else%}
+<form action="/delet3?primaryKey={{userDetails['name']}}&table={{t}}&type={{typeofquery}}" method="POST"><br>
+    <input type="submit">
+    
+    <button> <a href="/"> NO</a></button>
+</form>
+
+
+{%endif%}
+

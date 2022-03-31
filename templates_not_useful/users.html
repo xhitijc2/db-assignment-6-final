@@ -40,23 +40,15 @@
         {%endfor%}
         <table border="1">
             <tr>
-                <td>
-                    <b>Row No.</b>
-                </td>
                 {%for colname in columns%}
                     <td>
                         <b>{{colname[0]}}</b>
                     </td>
                 {%endfor%}
             </tr>
-            {%set ns = namespace(count = 1)%}
             {% for user in userDetails %}
         
                 <tr>
-                    <td>
-                        {{ns.count}}
-                        {%set ns.count = ns.count+1%}
-                    </td>
                     {%for i in range(user|length)%}
                     <td>
                         {{user[i]}}

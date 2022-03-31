@@ -1,5 +1,3 @@
-<br>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,44 +22,27 @@
             width: 60%;
             /* border: 5px solid #FFFF00; */
             padding: auto;
-}
+        }
 
     </style>
 </head>
 <body style ="background-color:lightgoldenrodyellow;">
     <div class="center">
-        <h3 style =" text-align: center;
-                    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-            " >
-        
-    </div>
-    <br>
-    <h1 style =" text-align: center;
-                    font-size: 3rem;
-                    font-weight: bold;
-                    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-                
-            " >
-           {%if t == 'i'%} {{"Insertion Page"}} {%else%} {{"Update entry"}} {%endif%}</h1>
-    <br>
-    
-    <div class="center"> 
-        
-        
-
+        <h1>FLASK</h1>
+        <h2>Update stuff here, </h2>
+        <br>
         <form method = "POST" action="">
-            
-            <h2>Enter values for:</h2> 
-            {%for column in columns%}
-            {{column[0]}}    <input type="{{column[1]}}", name="{{column[0]}}"/> <br><br>
-            {%endfor%}
+            Write new Name <input type="text", name="name"/>
+            <br>
+            write old Email <input type = "email" name = "email" />
+            <br>
+            <br>
             <input type = "submit">
         </form>
-        {%if t=='i'%}
-        <a href="/"><button>Go to home page</button></a>
-        <a href="/users?table={{tablename}}"><button>See current database</button></a>
-        
-        {%endif%}
+        <br>
+        <a href="/users"><button>See current database</button></a>
+        <a href="/delete"><button>Go to delete page</button></a>
+        <a href="/update"><button>Go to update page</button></a>
     </div>
 </body>
 </html>
